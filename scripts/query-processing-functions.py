@@ -19,7 +19,9 @@ def parser(query):
 
         "WHERE":    [r"^\($",     r"^[A-Z].*",     r"^\d+$"],       # "(", LABEL, NUMBER
 
-        "LABEL":    [r"^SELECT$", r"^FROM$", r"^WHERE$"]
+        "LABEL":    [r"^,$", r"^FROM$", r"^WHERE$"],
+
+        ",":        [r"^\*$",    r"^[A-Z].*"]
 
     }
 
@@ -33,13 +35,18 @@ def parser(query):
     for word in words:
         if state not in states or not is_valid_word(word, state):
             return False  # Erro de sintaxe
-        state = word
+        
+        if word in states and (word != ["LABEL"]):
+            state = word
+        else:
+            state = "LABEL"
+            
 
     return True
 
 
 
 # Exemplo de uso ------------------------------------------------------------------------------
-query1 = "SELECT * FROM customers WHERE country = 'USA'"
+query1 = "SELECT *, caio FROM customers"
 
 print(parser(query1)) 

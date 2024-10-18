@@ -13,11 +13,11 @@ def parser(query):
     states = {
         "INITIAL":  [r"^SELECT$"],                                  # "SELECT"   
         
-        "SELECT":   [r"^\*$",    r"^[A-Z].*"],                      # "*", LABEL
+        "SELECT":   [r"^\*$",    r"^\*,\s*$",   r"^[A-Z].*"],       # "*", LABEL
 
         "FROM":     [r"^[A-Z].*"],                                  # LABEL
 
-        "WHERE":    [r"^\($",     r"^[A-Z].*",     r"^\d+$"],       # "(", LABEL, NUMBER
+        "WHERE":    [r"^\($",    r"^[A-Z].*",   r"^\d+$"],          # "(", LABEL, NUMBER
 
         "LABEL":    [r"^,$", r"^FROM$", r"^WHERE$"],
 
@@ -39,7 +39,10 @@ def parser(query):
         if word in states and (word != ["LABEL"]):
             state = word
         else:
-            state = "LABEL"
+            if word[-1] == ",":
+                state = ","
+            else:
+                state = "LABEL"
             
 
     return True
@@ -47,6 +50,6 @@ def parser(query):
 
 
 # Exemplo de uso ------------------------------------------------------------------------------
-query1 = "SELECT *, caio FROM customers"
+query1 = "SELECT *, CAST FROM customers"
 
 print(parser(query1)) 

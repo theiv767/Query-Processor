@@ -1,3 +1,5 @@
+# VALIDAÇÃO DE SINTAXE
+
 import re
 
 def parser(query):

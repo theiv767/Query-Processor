@@ -1,6 +1,7 @@
 import streamlit as st
 
-from scripts.query_processing_functions import *
+from scripts.parser import *
+
 
 
 
@@ -15,6 +16,20 @@ if st.button("Processar Consulta"):
 
     print(query)
 
-    statues, msg = parser( query )
+    #------------------------------------------------------
+    #parser
+    status, msg = parser( query )
 
     st.write(f"Consulta processada: {msg}")
+
+    #------------------------------------------------------
+    # otimizador
+    if status:
+
+        pass
+
+
+    #------------------------------------------------------
+    # Exibir Grafo
+    if status:
+        pass

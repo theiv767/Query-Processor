@@ -1,6 +1,12 @@
 import streamlit as st
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './scripts')))
+
+import scripts.utils
 from scripts.parser import *
+
 
 
 

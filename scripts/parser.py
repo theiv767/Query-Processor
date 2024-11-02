@@ -1,6 +1,7 @@
 # VALIDAÇÃO DE SINTAXE
 
 import re
+from utils import *
 
 def parser(query):
     # Ex: SELECT <field> from <table> where <field> = 10
@@ -9,7 +10,7 @@ def parser(query):
     if len(query) == 0:
         return False
 
-    words = query.upper().split()
+    words = get_query_vector(query)
     
     state = "INITIAL"
     states = {
@@ -20,7 +21,7 @@ def parser(query):
         },
         
         "SELECT":   {
-            "MIDDLE":   [r"^,$", r"^[A-Z]+,$", r"^\*,$"],  
+            "MIDDLE":   [r"^,$"],  
             "END":      [r"^\*$", r"^[A-Z].*"]                       
         },
 
@@ -129,5 +130,9 @@ def parser(query):
          
 
     return True, "Sintax válida!"
+
+
+
+print(parser('select *, asdf, ff from asdf'))
 
 

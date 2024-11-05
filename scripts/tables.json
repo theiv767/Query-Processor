@@ -1,0 +1,66 @@
+{
+    "ENDERECO": {
+        "IDENDERECO": "INT",
+        "ENDERECOPADRAO": "TINYINT",
+        "LOGRADOURO": "VARCHAR(45)",
+        "NUMERO": "VARCHAR(45)",
+        "COMPLEMENTO": "VARCHAR(45)",
+        "BAIRRO": "VARCHAR(45)",
+        "CIDADE": "VARCHAR(45)",
+        "UF": "VARCHAR(2)",
+        "CEP": "VARCHAR(8)",
+        "TIPOENDERECO_IDTIPOENDERECO": "INT",
+        "CLIENTE_IDCLIENTE": "INT"
+    },
+    "CLIENTE": {
+        "IDCLIENTE": "INT",
+        "NOME": "VARCHAR(45)",
+        "EMAIL": "VARCHAR(100)",
+        "NASCIMENTO": "DATETIME",
+        "SENHA": "VARCHAR(200)",
+        "TIPOCLIENTE_IDTIPOCLIENTE": "INT",
+        "DATAREGISTRO": "DATETIME"
+    },
+    "PEDIDO": {
+        "IDPEDIDO": "INT",
+        "STATUS_IDSTATUS": "INT",
+        "DATAPEDIDO": "DATETIME",
+        "VALORTOTALPEDIDO": "DECIMAL(18,2)",
+        "CLIENTE_IDCLIENTE": "INT"
+    },
+    "PRODUTO": {
+        "IDPRODUTO": "INT",
+        "NOME": "VARCHAR(45)",
+        "DESCRIÇÃO": "VARCHAR(200)",
+        "PRECO": "DECIMAL(18,2)",
+        "QUANTESTOQUE": "DECIMAL(10,2)",
+        "CATEGORIA_IDCATEGORIA": "INT"
+    },
+    "STATUS": {
+        "IDSTATUS": "INT",
+        "DESCRICAO": "VARCHAR(45)"
+    },
+    "PEDIDO_HAS_PRODUTO": {
+        "IDPEDIDOPRODUTO": "INT",
+        "PEDIDO_IDPEDIDO": "INT",
+        "PRODUTO_IDPRODUTO": "INT",
+        "QUANTIDADE": "DECIMAL(10,2)",
+        "PRECOUNITARIO": "DECIMAL(18,2)"
+    },
+    "CATEGORIA": {
+        "IDCATEGORIA": "INT",
+        "DESCRICAO": "VARCHAR(45)"
+    },
+    "TIPOENDERECO": {
+        "IDTIPOENDERECO": "INT",
+        "DESCRICAO": "VARCHAR(45)"
+    },
+    "TIPOCLIENTE": {
+        "IDTIPOCLIENTE": "INT",
+        "DESCRICAO": "VARCHAR(45)"
+    },
+    "TELEFONE": {
+        "NUMERO": "VARCHAR(42)",
+        "CLIENTE_IDCLIENTE": "INT"
+    }
+}

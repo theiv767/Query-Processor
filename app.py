@@ -6,6 +6,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './scrip
 
 import scripts.utils
 from scripts.parser import *
+from scripts.optimizer import *
+from scripts.plot import *
+from scripts.utils import *
 
 
 
@@ -31,11 +34,13 @@ if st.button("Processar Consulta"):
     #------------------------------------------------------
     # otimizador
     if status:
+        sql_formatada = replace_sql_keywords(query)
+        algebra_result = convert_sql_to_algebra(sql_formatada)
 
-        pass
+        st.write(f"Algebra Relacional: {algebra_result}")
 
+        tree = construct_tree(algebra_result)
+        plot_tree(tree)
 
-    #------------------------------------------------------
-    # Exibir Grafo
-    if status:
+        st.pyplot(plt)
         pass

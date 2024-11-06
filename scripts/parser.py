@@ -74,70 +74,83 @@ def is_valid_where(qry_where, alias):
                 continue    
 
         # tabelas.coluna -------------------------------
-        if re.fullmatch(r"^[A-Z].*", word):
+
+        if re.fullmatch(r"^[A-Z].*", word) or re.fullmatch(r"^\d+$", word):
             colum_type = ""
             
-            if "." in word:
-                tbl_alias = word.split(".")[0]
-                tbl_colum = word.split(".")[1]
 
-                # ---------------
-                # validando o alias
-                table_name = ""
-                exist_alias = False
-                for i in alias:
-                     if i[0].upper() == tbl_alias.upper():
-                        exist_alias = True
-                        table_name = i[1]
-                        table_columns_upper = {k.upper() for k in storage_tbls[i[1]].keys()}
-                        if not tbl_colum.upper() in table_columns_upper:
-                            return False, f"Coluna '{tbl_colum}' não encontrada na tabela {i[1]}!!!"
-                        break
-                
-                if not exist_alias:
-                    return False, f"Alias '{tbl_alias}' não definido na consulta!!!"
-
-                #--------------
-                # verificação de tipagem
-                colum_type = storage_tbls[table_name][tbl_colum]
-
-                if "VARCHAR(" in colum_type:
-                    colum_type = "STRING"
-                elif "TINYINT" in colum_type:
-                    colum_type = "INT"
-                elif "DATE" in colum_type:
-                    colum_type = "DATE"
-                elif "DECIMAL(" in colum_type:
+            aux_test_float = False
+            aux_word_splited = word.split(".")
+            if len(aux_word_splited) > 1:
+                if re.fullmatch(r"^\d+$", aux_word_splited[0]):
                     colum_type = "FLOAT"
-                    
+
+            if re.fullmatch(r"^\d+$", word):
+                if colum_type == "":
+                    colum_type = "INT"
+                
             else:
-                tbl_colum = word
+                if "." in word:
+                    tbl_alias = word.split(".")[0]
+                    tbl_colum = word.split(".")[1]
 
-                num_match = 0
+                    # ---------------
+                    # validando o alias
+                    table_name = ""
+                    exist_alias = False
+                    for i in alias:
+                        if i[0].upper() == tbl_alias.upper():
+                            exist_alias = True
+                            table_name = i[1]
+                            table_columns_upper = {k.upper() for k in storage_tbls[i[1]].keys()}
+                            if not tbl_colum.upper() in table_columns_upper:
+                                return False, f"Coluna '{tbl_colum}' não encontrada na tabela {i[1]}!!!"
+                            break
+                    
+                    if not exist_alias:
+                        return False, f"Alias '{tbl_alias}' não definido na consulta!!!"
 
-                table_name = ""
-                for i in alias:
-                    if tbl_colum in storage_tbls[1].keys():
-                        table_name = i[1]
-                        num_match += 1
+                    #--------------
+                    # verificação de tipagem
+                    colum_type = storage_tbls[table_name][tbl_colum]
+
+                    if "VARCHAR(" in colum_type:
+                        colum_type = "STRING"
+                    elif "TINYINT" in colum_type:
+                        colum_type = "INT"
+                    elif "DATE" in colum_type:
+                        colum_type = "DATE"
+                    elif "DECIMAL(" in colum_type:
+                        colum_type = "FLOAT"
+                        
+                else:
+                    tbl_colum = word
+
+                    num_match = 0
+
+                    table_name = ""
+                    for i in alias:
+                        if tbl_colum in storage_tbls[1].keys():
+                            table_name = i[1]
+                            num_match += 1
 
 
-                if num_match > 1:
-                    return False, f"Tabela da coluna '{tbl_colum}' não foi especificada!!!" 
-                elif num_match < 1:
-                    return False, f"Tabela da coluna '{tbl_colum}' não existe entre as tabelas!!!" 
-                
+                    if num_match > 1:
+                        return False, f"Tabela da coluna '{tbl_colum}' não foi especificada!!!" 
+                    elif num_match < 1:
+                        return False, f"Tabela da coluna '{tbl_colum}' não existe entre as tabelas!!!" 
+                    
 
-                colum_type = storage_tbls[table_name][tbl_colum]
+                    colum_type = storage_tbls[table_name][tbl_colum]
 
-                if "VARCHAR(" in colum_type:
-                    colum_type = "STRING"
-                elif "TINYINT" in colum_type:
-                    colum_type = "INT"
-                elif "DATE" in colum_type:
-                    colum_type = "DATE"
-                elif "DECIMAL(" in colum_type:
-                    colum_type = "FLOAT"
+                    if "VARCHAR(" in colum_type:
+                        colum_type = "STRING"
+                    elif "TINYINT" in colum_type:
+                        colum_type = "INT"
+                    elif "DATE" in colum_type:
+                        colum_type = "DATE"
+                    elif "DECIMAL(" in colum_type:
+                        colum_type = "FLOAT"
 
 
             is_last_parenthesis = False
@@ -222,11 +235,16 @@ def is_valid_rels(query):
                 tbl_alias = word.split(".")[0]
                 tbl_colum = word.split(".")[1]
 
+                exist_alias = False
                 for i in alias:
                     if i[0].upper() == tbl_alias.upper():
+                        exist_alias = True
                         table_columns_upper = {k.upper() for k in storage_tbls[i[1]].keys()}
                         if not tbl_colum.upper() in table_columns_upper:
                             return False, f"Coluna '{tbl_colum}' não encontrada na tabela {i[1]}!!!"
+                        
+                if not exist_alias:
+                    return False, f"Alias '{tbl_alias}' não definido na consulta!!!"
                 
             else:
                 tbl_colum = word
@@ -404,4 +422,4 @@ def parser(query):
 
     return True, "Sintax válida!"
 
-print( parser("select * from endereco ed WHERE ed.idEndereco = ed.idEndereco ") )
+print( parser("select ed.IDENDERECO, ed.BAIRRO from ENDERECO ed where ed.IDENDERECO = 1") )
